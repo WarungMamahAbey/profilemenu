@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warung Mamah Abey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap">
+    <style>
+        :root {
+            --primary: #C8102E;
+            --secondary: #FFD700;
+            --accent: #FF4500;
+            --light: #FFF5E1;
+            --dark: #2E1A1A;
+            --footer-bg: #1A0F0F;
+            --footer-text: #F5E6CC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Bebas Neue', 'Roboto Slab', 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .slider-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            transition: left 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            left: 0;
+        }
+
+        .home-slide {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.6);
+        }
+
+        .tagline {
+            font-family: 'Roboto Slab', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--light);
+        }
+
+        .menu-slide {
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .about-slide {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 3rem 0;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--accent);
+        }
+
+        .menu-section {
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            padding: 1rem;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .menu-image-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            filter: brightness(0.9);
+            transition: filter 0.3s;
+        }
+
+        .menu-card:hover .menu-image-preview {
+            filter: brightness(1);
+        }
+
+        .menu-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .menu-price {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .menu-rating {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .best-seller {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            font-family: 'Bebas Neue', sans-serif;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--dark);
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+        }
+
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            background-color: #eee;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quantity {
+            margin: 0 10px;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-align: right;
+            margin-bottom: 2rem;
+        }
+
+        .checkout-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .checkout-btn:hover {
+            background-color: #e63d00;
+        }
+
+        .cart-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .footer-section {
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .footer-section p {
+            line-height: 1.6;
+            color: var(--footer-text);
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .contact-info {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-info li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Roboto Slab', serif;
+            color: var(--footer-text);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--footer-text);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+
+        .wa-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .wa-btn:hover {
+            background-color: #1EBE54;
+        }
+
+        .maps-btn {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .maps-btn:hover {
+            background-color: #3367D6;
+        }
+
+        .slider-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slider-dot.active {
+            background-color: var(--accent);
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50% !important;
+            transform: translateY(-50%);
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+
+        .slider-arrow:hover {
+            background-color: var(--accent);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        .menu-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .menu-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-modal-img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .menu-modal-name {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .menu-modal-desc {
+            font-family: 'Roboto Slab', serif;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .menu-modal-price {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .menu-modal-rating {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .menu-modal-options {
+            font-family: 'Roboto Slab', serif;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .menu-modal-options label {
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-modal-options select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            font-family: 'Roboto Slab', serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .slide-logo {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            z-index: 1000;
+        }
+
+        .payment-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .payment-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-modal h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        .payment-option label {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-family: 'Roboto Slab', serif;
+            flex: 1;
+        }
+
+        .payment-option img {
+            width: 40px;
+            height: auto;
+        }
+
+        .confirm-payment-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .confirm-payment-btn:hover {
+            background-color: #e63d00;
+        }
+
+        .bill-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .bill-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bill-modal h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .bill-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .bill-details p {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .bill-table th, .bill-table td {
+            padding: 0.8rem;
+            border: 1px solid #eee;
+            text-align: left;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .bill-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .bill-table td {
+            color: #555;
+        }
+
+        .bill-total {
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-align: right;
+            color: var(--accent);
+        }
+
+        .download-bill-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.2rem;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .download-bill-btn:hover {
+            background-color: var(--dark);
+        }
+
+        /* New styles for toppings */
+        .toppings-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .topping-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .topping-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Delivery buttons */
+        .delivery-btn {
+            background-color: #FF6B00;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .delivery-btn.shopeefood {
+            background-color: #EE4D2D;
+        }
+
+        .delivery-btn.grabfood {
+            background-color: #00B14F;
+        }
+
+        .delivery-btn:hover {
+            opacity: 0.9;
+        }
+
+        .delivery-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .cart-sidebar.active {
+                right: 0;
+            }
+
+            .logo-container {
+                flex-direction: column;
+            }
+
+            .logo-img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .logo {
+                font-size: 2.8rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .nav-bar {
+                top: 0.5rem;
+                right: 0.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .slider-arrow {
+                padding: 0.8rem;
+                font-size: 1.2rem;
+            }
+
+            .menu-modal, .payment-modal, .bill-modal {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .menu-modal-img {
+                max-height: 300px;
+            }
+
+            .slide-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .payment-option img {
+                width: 30px;
+            }
+
+            .bill-table th, .bill-table td {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+            }
+
+            .delivery-buttons {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .menu-image-preview {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <button class="nav-btn" data-slide="0">Home</button>
+        <button class="nav-btn" data-slide="1">Menu</button>
+        <button class="nav-btn" data-slide="2">About</button>
+    </div>
+
+    <div class="slider-container">
+        <button class="slider-arrow arrow-left"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-arrow arrow-right"><i class="fas fa-chevron-right"></i></button>
+        <div class="slide home-slide active" id="home">
+            <div class="logo-container">
+                <img src="https://i.ibb.co.com/jPtSCfBk/Whats-App-Image-2025-07-04-at-4-25-59-PM.jpg" class="logo-img">
+                <div class="logo">Warung Mamah Abey</div>
+            </div>
+            <p class="tagline">Makanan dengan Rasa yang Menggugah Selera, Harga Bestiean!!!</p>
+        </div>
+
+        <div class="slide menu-slide" id="menu">
+            <img src="https://i.ibb.co.com/jPtSCfBk/Whats-App-Image-2025-07-04-at-4-25-59-PM.jpg" class="slide-logo">
+            <div class="container">
+                <section class="menu-section">
+                    <h2 class="section-title">Menu Makanan</h2>
+                    <div class="menu-grid">
+                        <div class="menu-card" data-id="1" data-name="Roti Jambrong" data-price="7000" data-rating="4.3" data-desc="Roti panggang lembut yang disajikan dengan saus gurih, taburan keju parut melimpah, dan olesan saus kental yang khas. Perpaduan rasa gurih dan creamy menjadikannya camilan unik dan menggugah selera." data-img="https://i.ibb.co.com/9HYFQT49/Whats-App-Image-2025-07-04-at-4-26-00-PM-2.jpg" data-options='{"flavors": [{"name": "Keju Susu", "price": 2000}, {"name": "Greentea", "price": 0}, {"name": "Coklat", "price": 0}]}'>
+                            <img src="https://i.ibb.co.com/9HYFQT49/Whats-App-Image-2025-07-04-at-4-26-00-PM-2.jpg" class="menu-image-preview" alt="Roti Jambrong">
+                            <h3 class="menu-name">Roti Jambrong</h3>
+                            <span class="menu-price">Rp 7.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.3</div>
+                            <div class="menu-options" style="font-family: 'Roboto Slab', serif; color: #555; margin-bottom: 1rem;">
+                                <label>Pilih Rasa:</label>
+                                <select class="flavor-select">
+                                    <option value="Keju Susu|2000">Keju Susu (+Rp 2.000)</option>
+                                    <option value="Greentea|0">Greentea</option>
+                                    <option value="Coklat|0">Coklat</option>
+                                </select>
+                            </div>
+                            <button class="add-to-cart" data-id="1" data-name="Roti Jambrong" data-price="7000" data-rating="4.3">Tambah ke Keranjang</button>
+                        </div>
+                        
+                        <div class="menu-card" data-id="8" data-name="MIETUL" data-price="8000" data-rating="4.9" data-desc="Mie pedas dengan tekstur kenyal yang disajikan dengan aneka topping dan sayuran segar. Disiram saus merah bercita rasa gurih pedas, hidangan ini cocok untuk pecinta makanan beraroma kuat dan menggugah selera." data-img="https://i.ibb.co.com/bMnT9jWX/Whats-App-Image-2025-07-04-at-4-26-00-PM.jpg" data-options='{"toppings": [{"name": "Dumpling", "price": 5000}, {"name": "Bakso Besar", "price": 5000}, {"name": "Bakso Kecil", "price": 3000}, {"name": "Ceker", "price": 3000}]}'>
+                            <img src="https://i.ibb.co.com/bMnT9jWX/Whats-App-Image-2025-07-04-at-4-26-00-PM.jpg" class="menu-image-preview" alt="MIETUL">
+                            <h3 class="menu-name">MIETUL</h3>
+                            <span class="menu-price">Rp 8.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.9</div>
+                            <div class="menu-options" style="font-family: 'Roboto Slab', serif; color: #555; margin-bottom: 1rem;">
+                                <label>Pilih Topping (bisa lebih dari satu):</label>
+                                <div class="toppings-container">
+                                    <div class="topping-option">
+                                        <input type="checkbox" id="topping-dumpling" class="topping-checkbox" value="Dumpling|5000">
+                                        <label for="topping-dumpling">Dumpling (+Rp 5.000)</label>
+                                    </div>
+                                    <div class="topping-option">
+                                        <input type="checkbox" id="topping-bakso-besar" class="topping-checkbox" value="Bakso Besar|5000">
+                                        <label for="topping-bakso-besar">Bakso Besar (+Rp 5.000)</label>
+                                    </div>
+                                    <div class="topping-option">
+                                        <input type="checkbox" id="topping-bakso-kecil" class="topping-checkbox" value="Bakso Kecil|3000">
+                                        <label for="topping-bakso-kecil">Bakso Kecil (+Rp 3.000)</label>
+                                    </div>
+                                    <div class="topping-option">
+                                        <input type="checkbox" id="topping-ceker" class="topping-checkbox" value="Ceker|3000">
+                                        <label for="topping-ceker">Ceker (+Rp 3.000)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="add-to-cart" data-id="8" data-name="MIETUL" data-price="8000" data-rating="4.9">Tambah ke Keranjang</button>
+                        </div>
+                        
+                        <div class="menu-card" data-id="2" data-name="Dimsum Mentai" data-price="18000" data-rating="4.4" data-desc="Dimsum kukus yang disajikan dengan topping saus mentai yang creamy dan gurih, lalu dibakar hingga sausnya sedikit caramelized. Taburan rumput laut kering di atasnya menambah aroma khas." data-img="https://i.ibb.co.com/YTkjLLtM/Whats-App-Image-2025-07-04-at-4-26-01-PM-1.jpg">
+                            <img src="https://i.ibb.co.com/YTkjLLtM/Whats-App-Image-2025-07-04-at-4-26-01-PM-1.jpg" class="menu-image-preview" alt="Dimsum Mentai">
+                            <h3 class="menu-name">Dimsum Mentai</h3>
+                            <span class="menu-price">Rp 18.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.4</div>
+                            <button class="add-to-cart" data-id="2" data-name="Dimsum Mentai" data-price="18000" data-rating="4.4">Tambah ke Keranjang</button>
+                        </div>
+                        
+                        <div class="menu-card" data-id="3" data-name="Chicken Steak" data-price="20000" data-rating="4.2" data-desc="Potongan ayam yang dimasak dengan saus barbeque kental dan gurih, disajikan bersama kentang wedges renyah serta sayuran rebus seperti wortel dan buncis. Menu ini menawarkan perpaduan rasa lezat dan seimbang antara protein, karbohidrat, dan serat." data-img="https://i.ibb.co.com/XrD2MQwV/Whats-App-Image-2025-07-04-at-4-26-02-PM.jpg">
+                            <img src="https://i.ibb.co.com/XrD2MQwV/Whats-App-Image-2025-07-04-at-4-26-02-PM.jpg" class="menu-image-preview" alt="Chicken Steak">
+                            <h3 class="menu-name">Chicken Steak</h3>
+                            <span class="menu-price">Rp 20.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.2</div>
+                            <button class="add-to-cart" data-id="3" data-name="Chicken Steak" data-price="20000" data-rating="4.2">Tambah ke Keranjang</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="menu-section">
+                    <h2 class="section-title">Menu Minuman</h2>
+                    <div class="menu-grid">
+                        <div class="menu-card" data-id="4" data-name="Jus Stoberi" data-price="8000" data-rating="4.6" data-desc="Minuman segar berbahan dasar stroberi segar yang diblender halus hingga menghasilkan tekstur creamy dan rasa manis-asam alami." data-img="https://i.ibb.co.com/tMMjrWbm/Whats-App-Image-2025-07-04-at-4-26-01-PM.jpg">
+                            <img src="https://i.ibb.co.com/tMMjrWbm/Whats-App-Image-2025-07-04-at-4-26-01-PM.jpg" class="menu-image-preview" alt="Jus Stoberi">
+                            <h3 class="menu-name">Jus Stoberi</h3>
+                            <span class="menu-price">Rp 8.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.6</div>
+                            <button class="add-to-cart" data-id="4" data-name="Jus Stoberi" data-price="8000" data-rating="4.6">Tambah ke Keranjang</button>
+                        </div>
+                        <div class="menu-card" data-id="5" data-name="Jus Alpukat" data-price="10000" data-rating="4.5" data-desc="Minuman kental dan lembut yang terbuat dari alpukat segar yang diblender halus." data-img="https://i.ibb.co.com/SDzfLYC0/Whats-App-Image-2025-07-04-at-4-26-01-PM-2.jpg">
+                            <img src="https://i.ibb.co.com/SDzfLYC0/Whats-App-Image-2025-07-04-at-4-26-01-PM-2.jpg" class="menu-image-preview" alt="Jus Alpukat">
+                            <h3 class="menu-name">Jus Alpukat</h3>
+                            <span class="menu-price">Rp 10.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.5</div>
+                            <button class="add-to-cart" data-id="5" data-name="Jus Alpukat" data-price="10000" data-rating="4.5">Tambah ke Keranjang</button>
+                        </div>
+                        <div class="menu-card" data-id="9" data-name="Es Jeruk" data-price="5000" data-rating="4.7" data-desc="Minuman segar yang terbuat dari perasan jeruk asli, disajikan dingin dengan es batu." data-img="https://i.ibb.co.com/F4Hzrrmx/Whats-App-Image-2025-07-04-at-4-26-00-PM-1.jpg">
+                            <img src="https://i.ibb.co.com/F4Hzrrmx/Whats-App-Image-2025-07-04-at-4-26-00-PM-1.jpg" class="menu-image-preview" alt="Es Jeruk">
+                            <h3 class="menu-name">Es Jeruk</h3>
+                            <span class="menu-price">Rp 5.000</span>
+                            <div class="menu-rating"><i class="fas fa-star"></i> 4.7</div>
+                            <button class="add-to-cart" data-id="9" data-name="Es Jeruk" data-price="5000" data-rating="4.7">Tambah ke Keranjang</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="slide about-slide" id="about">
+            <img src="https://i.ibb.co.com/jPtSCfBk/Whats-App-Image-2025-07-04-at-4-25-59-PM.jpg" class="slide-logo">
+            <div class="container">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                        <img src="https://i.ibb.co.com/jPtSCfBk/Whats-App-Image-2025-07-04-at-4-25-59-PM.jpg" style="width: 120px; height: 120px; object-fit: contain; border-radius: 10px;">
+                        <h2 style="color: var(--secondary);">Warung Mamah Abey</h2>
+                    </div>
+                    <p>Warung Mamah Abey adalah UMKM kuliner yang berdedikasi untuk menyajikan hidangan yang menggugah selera. Berdiri sejak 2025, kami menggunakan bahan-bahan segar dan resep autentik untuk memberikan pengalaman kuliner terbaik bagi pelanggan. Visi kami adalah menjadi warung makanan favorit semua kalangan yang menghadirkan kelezatan dan kenikmatan dalam setiap suapan.</p>
+                    
+                    <div class="delivery-buttons">
+                        <a href="https://shopee.co.id/universal-link/now-food/shop/22149631?deep_and_deferred=1&shareChannel=copy_link" class="delivery-btn shopeefood">
+                            <i class="fas fa-shopping-bag"></i> Shopeefood
+                        </a>
+                        <a href="https://r.grab.com/g/6-20250515_151251_e2270357baeb45faa43c0bef0487615b_MEXMPS-6-C7DDLT5AWAJYLT" class="delivery-btn grabfood">
+                            <i class="fas fa-motorcycle"></i> Grabfood
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h2>Hubungi Kami</h2>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Jalan Mayang, Tegalluar, Bojongsoang, Kab. Bandung</li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:warungmamahabey@gmail.com">warungmamahabey@gmail.com</a></li>
+                        <li><i class="fas fa-clock"></i> Setiap hari: 08:00 - 20:00</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/warung.mamah.abey?igsh=c3FyejBkdDZmbXlx" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@warung.mamah.abey?_t=ZS-8xkFjJnZ0Vu&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                    <a href="https://wa.me/+6289669097376?text=Halo,%20saya%20ingin%20memesan%20di%20Warung%20Mamah%20Abey!" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> Hubungi via WhatsApp</a>
+                    <a href="https://maps.app.goo.gl/9FX6fTdiMcTYBrqA9?g_st=ac" target="_blank" class="maps-btn"><i class="fas fa-map-marked-alt"></i> Buka di Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-nav">
+        <div class="slider-dot active" data-slide="0"></div>
+        <div class="slider-dot" data-slide="1"></div>
+        <div class="slider-dot" data-slide="2"></div>
+    </div>
+
+    <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Keranjang Belanja</h2>
+            <button class="close-cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items">
+            <!-- Item akan ditambahkan secara dinamis -->
+        </div>
+        <div class="cart-total">
+            Total: Rp <span class="total-price">0</span>
+        </div>
+        <button class="checkout-btn">Checkout</button>
+    </div>
+
+    <div class="menu-modal">
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+        <img class="menu-modal-img" src="" alt="">
+        <h3 class="menu-modal-name"></h3>
+        <p class="menu-modal-desc"></p>
+        <span class="menu-modal-price"></span>
+        <div class="menu-modal-rating"></div>
+        <div class="menu-modal-options">
+            <!-- Options will be added dynamically -->
+        </div>
+        <button class="add-to-cart modal-add-to-cart">Tambah ke Keranjang</button>
+    </div>
+
+    <div class="payment-modal">
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+        <h2>Pilih Metode Pembayaran</h2>
+        <div class="payment-options">
+            <div class="payment-option">
+                <input type="radio" name="payment-method" id="qris" value="QRIS">
+                <label for="qris">QRIS</label>
+            </div>
+            <div class="payment-option">
+                <input type="radio" name="payment-method" id="cod" value="Cash">
+                <label for="cod">Cash</label>
+            </div>
+        </div>
+        <button class="confirm-payment-btn">Konfirmasi Pembayaran</button>
+    </div>
+
+    <div class="bill-modal">
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+        <div class="bill-content">
+            <h2>Detail Pesanan</h2>
+            <div class="bill-details">
+                <p><strong>ID Pesanan:</strong> <span class="order-id"></span></p>
+                <p><strong>Tanggal:</strong> <span class="order-date"></span></p>
+                <p><strong>Metode Pembayaran:</strong> <span class="payment-method"></span></p>
+            </div>
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Jumlah</th>
+                        <th>Harga</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="bill-total-label">Total</td>
+                        <td class="bill-total"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <a href="#" class="download-bill-btn" id="download-bill">Download PDF</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const sliderDots = document.querySelectorAll('.slider-dot');
+            const arrowLeft = document.querySelector('.arrow-left');
+            const arrowRight = document.querySelector('.arrow-right');
+            const cartIcon = document.querySelector('.cart-icon');
+            const cartSidebar = document.querySelector('.cart-sidebar');
+            const closeCart = document.querySelector('.close-cart');
+            const overlay = document.querySelector('.overlay');
+            const addToCartBtns = document.querySelectorAll('.add-to-cart');
+            const cartItemsContainer = document.querySelector('.cart-items');
+            const cartCount = document.querySelector('.cart-count');
+            const totalPriceElement = document.querySelector('.total-price');
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            const menuCards = document.querySelectorAll('.menu-card');
+            const menuModal = document.querySelector('.menu-modal');
+            const closeModalButtons = document.querySelectorAll('.close-modal');
+            const modalImg = document.querySelector('.menu-modal-img');
+            const modalName = document.querySelector('.menu-modal-name');
+            const modalDesc = document.querySelector('.menu-modal-desc');
+            const modalPrice = document.querySelector('.menu-modal-price');
+            const modalRating = document.querySelector('.menu-modal-rating');
+            const modalOptions = document.querySelector('.menu-modal-options');
+            const modalAddToCart = document.querySelector('.modal-add-to-cart');
+            const paymentModal = document.querySelector('.payment-modal');
+            const confirmPaymentBtn = document.querySelector('.confirm-payment-btn');
+            const billModal = document.querySelector('.bill-modal');
+            const downloadBillBtn = document.querySelector('#download-bill');
+
+            let cart = [];
+            let currentSlide = 0;
+            let currentOrder = null;
+            let activeModalCard = null;
+
+            function showSlide(index) {
+                if (index >= slides.length) index = 0;
+                if (index < 0) index = slides.length - 1;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                sliderDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+            }
+
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const slideIndex = parseInt(btn.dataset.slide);
+                    showSlide(slideIndex);
+                });
+            });
+
+            sliderDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const slideIndex = parseInt(dot.dataset.slide);
+                    showSlide(slideIndex);
+                });
+            });
+
+            arrowLeft.addEventListener('click', () => {
+                showSlide(currentSlide - 1);
+            });
+
+            arrowRight.addEventListener('click', () => {
+                showSlide(currentSlide + 1);
+            });
+
+            menuCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Prevent modal from opening if clicking on these elements
+                    if (e.target.classList.contains('add-to-cart') || 
+                        e.target.tagName === 'SELECT' || 
+                        e.target.tagName === 'OPTION' || 
+                        e.target.tagName === 'INPUT' || 
+                        e.target.tagName === 'LABEL') return;
+                    
+                    activeModalCard = card;
+                    
+                    const id = card.dataset.id;
+                    const name = card.dataset.name;
+                    const price = card.dataset.price;
+                    const rating = card.dataset.rating;
+                    const desc = card.dataset.desc;
+                    const img = card.dataset.img;
+                    const options = card.dataset.options ? JSON.parse(card.dataset.options) : {};
+
+                    modalImg.src = img;
+                    modalImg.alt = name;
+                    modalName.textContent = name;
+                    modalDesc.textContent = desc;
+                    modalPrice.textContent = `Rp ${parseInt(price).toLocaleString('id-ID')}`;
+                    modalRating.innerHTML = `<i class="fas fa-star"></i> ${rating}`;
+                    modalAddToCart.dataset.id = id;
+                    modalAddToCart.dataset.name = name;
+                    modalAddToCart.dataset.price = price;
+                    modalAddToCart.dataset.rating = rating;
+
+                    // Clear previous options
+                    modalOptions.innerHTML = '';
+
+                    if (options.flavors) {
+                        const label = document.createElement('label');
+                        label.textContent = 'Pilih Rasa:';
+                        modalOptions.appendChild(label);
+
+                        const select = document.createElement('select');
+                        select.classList.add('option-select');
+                        
+                        options.flavors.forEach(flavor => {
+                            const option = document.createElement('option');
+                            option.value = `${flavor.name}|${flavor.price}`;
+                            option.textContent = flavor.price > 0 ? `${flavor.name} (+Rp ${flavor.price.toLocaleString('id-ID')})` : flavor.name;
+                            select.appendChild(option);
+                        });
+                        
+                        modalOptions.appendChild(select);
+                    } else if (options.toppings) {
+                        const label = document.createElement('label');
+                        label.textContent = 'Pilih Topping (bisa lebih dari satu):';
+                        modalOptions.appendChild(label);
+
+                        const toppingsContainer = document.createElement('div');
+                        toppingsContainer.classList.add('toppings-container');
+                        
+                        options.toppings.forEach(topping => {
+                            const toppingOption = document.createElement('div');
+                            toppingOption.classList.add('topping-option');
+                            
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `modal-topping-${topping.name.toLowerCase().replace(' ', '-')}`;
+                            checkbox.classList.add('topping-checkbox');
+                            checkbox.value = `${topping.name}|${topping.price}`;
+                            
+                            const label = document.createElement('label');
+                            label.htmlFor = `modal-topping-${topping.name.toLowerCase().replace(' ', '-')}`;
+                            label.textContent = topping.price > 0 ? `${topping.name} (+Rp ${topping.price.toLocaleString('id-ID')})` : topping.name;
+                            
+                            toppingOption.appendChild(checkbox);
+                            toppingOption.appendChild(label);
+                            toppingsContainer.appendChild(toppingOption);
+                        });
+                        
+                        modalOptions.appendChild(toppingsContainer);
+                    }
+
+                    menuModal.classList.add('active');
+                    overlay.classList.add('active');
+                });
+            });
+
+            closeModalButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    menuModal.classList.remove('active');
+                    paymentModal.classList.remove('active');
+                    billModal.classList.remove('active');
+                    overlay.classList.remove('active');
+                    activeModalCard = null;
+                });
+            });
+
+            overlay.addEventListener('click', () => {
+                menuModal.classList.remove('active');
+                cartSidebar.classList.remove('active');
+                paymentModal.classList.remove('active');
+                billModal.classList.remove('active');
+                overlay.classList.remove('active');
+                activeModalCard = null;
+            });
+
+            cartIcon.addEventListener('click', () => {
+                cartSidebar.classList.add('active');
+                overlay.classList.add('active');
+            });
+
+            closeCart.addEventListener('click', () => {
+                cartSidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            function addToCart(id, name, price, option = 'none', optionPrice = 0) {
+                const existingItem = cart.find(item => item.id === id && item.option === option);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name: option !== 'none' ? `${name} (${option})` : name,
+                        price: parseInt(price) + parseInt(optionPrice),
+                        quantity: 1,
+                        option
+                    });
+                }
+                updateCart();
+            }
+
+            addToCartBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    const name = btn.dataset.name;
+                    const price = btn.dataset.price;
+                    const card = btn.closest('.menu-card');
+                    
+                    // Handle MIETUL toppings (multiple selection)
+                    if (id === '8') {
+                        const selectedToppings = [];
+                        let toppingsPrice = 0;
+                        const checkboxes = card.querySelectorAll('.topping-checkbox:checked');
+                        
+                        checkboxes.forEach(checkbox => {
+                            const [toppingName, toppingPrice] = checkbox.value.split('|');
+                            selectedToppings.push(toppingName);
+                            toppingsPrice += parseInt(toppingPrice);
+                        });
+                        
+                        const optionName = selectedToppings.length > 0 ? selectedToppings.join(', ') : 'none';
+                        
+                        addToCart(
+                            id, 
+                            name,
+                            price,
+                            optionName,
+                            toppingsPrice
+                        );
+                    } 
+                    // Handle Roti Jambrong (single selection)
+                    else {
+                        const select = card.querySelector('.flavor-select');
+                        let option = 'none';
+                        let optionPrice = 0;
+
+                        if (select) {
+                            const [selectedOption, selectedPrice] = select.value.split('|');
+                            option = selectedOption;
+                            optionPrice = parseInt(selectedPrice);
+                        }
+
+                        addToCart(id, name, price, option, optionPrice);
+                    }
+
+                    btn.textContent = 'Ditambahkan!';
+                    setTimeout(() => {
+                        btn.textContent = 'Tambah ke Keranjang';
+                    }, 1000);
+                });
+            });
+
+            modalAddToCart.addEventListener('click', () => {
+                const id = modalAddToCart.dataset.id;
+                const name = modalAddToCart.dataset.name;
+                const price = modalAddToCart.dataset.price;
+                
+                if (id === '8') {
+                    // Handle MIETUL toppings in modal
+                    const selectedToppings = [];
+                    let toppingsPrice = 0;
+                    const checkboxes = menuModal.querySelectorAll('.topping-checkbox:checked');
+                    
+                    checkboxes.forEach(checkbox => {
+                        const [toppingName, toppingPrice] = checkbox.value.split('|');
+                        selectedToppings.push(toppingName);
+                        toppingsPrice += parseInt(toppingPrice);
+                    });
+                    
+                    const optionName = selectedToppings.length > 0 ? selectedToppings.join(', ') : 'none';
+                    
+                    addToCart(
+                        id, 
+                        name,
+                        price,
+                        optionName,
+                        toppingsPrice
+                    );
+                } else {
+                    // Handle other items with single selection
+                    const select = menuModal.querySelector('.option-select');
+                    if (select) {
+                        const [option, optionPrice] = select.value.split('|');
+                        addToCart(id, name, price, option, optionPrice);
+                    } else {
+                        addToCart(id, name, price);
+                    }
+                }
+
+                modalAddToCart.textContent = 'Ditambahkan!';
+                setTimeout(() => {
+                    modalAddToCart.textContent = 'Tambah ke Keranjang';
+                    menuModal.classList.remove('active');
+                    overlay.classList.remove('active');
+                }, 1000);
+            });
+
+            function updateCart() {
+                renderCartItems();
+                updateCartCount();
+                updateTotalPrice();
+            }
+
+            function renderCartItems() {
+                cartItemsContainer.innerHTML = '';
+
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<p>Keranjang belanja kosong</p>';
+                    return;
+                }
+
+                cart.forEach(item => {
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.classList.add('cart-item');
+                    cartItemElement.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn minus" data-id="${item.id}" data-option="${item.option}">-</button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="quantity-btn plus" data-id="${item.id}" data-option="${item.option}">+</button>
+                            <button class="remove-item" data-id="${item.id}" data-option="${item.option}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+
+                document.querySelectorAll('.minus').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const option = btn.dataset.option;
+                        const item = cart.find(item => item.id === id && item.option === option);
+
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== id || item.option !== option);
+                        }
+
+                        updateCart();
+                    });
+                });
+
+                document.querySelectorAll('.plus').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const option = btn.dataset.option;
+                        const item = cart.find(item => item.id === id && item.option === option);
+                        item.quantity += 1;
+                        updateCart();
+                    });
+                });
+
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const option = btn.dataset.option;
+                        cart = cart.filter(item => item.id !== id || item.option !== option);
+                        updateCart();
+                    });
+                });
+            }
+
+            function updateCartCount() {
+                const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+                cartCount.textContent = totalItems;
+            }
+
+            function updateTotalPrice() {
+                const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                totalPriceElement.textContent = totalPrice.toLocaleString('id-ID');
+            }
+
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    alert('Keranjang belanja kosong!');
+                    return;
+                }
+                cartSidebar.classList.remove('active');
+                paymentModal.classList.add('active');
+                overlay.classList.add('active');
+            });
+
+            confirmPaymentBtn.addEventListener('click', () => {
+                const selectedMethod = document.querySelector('input[name="payment-method"]:checked');
+                if (!selectedMethod) {
+                    alert('Silakan pilih metode pembayaran!');
+                    return;
+                }
+
+                const orderId = crypto.randomUUID().slice(0, 8);
+                const date = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+                const paymentMethod = selectedMethod.value;
+
+                currentOrder = {
+                    id: orderId,
+                    date,
+                    paymentMethod,
+                    items: [...cart],
+                    total: cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+                };
+
+                renderBill();
+                paymentModal.classList.remove('active');
+                billModal.classList.add('active');
+            });
+
+            function renderBill() {
+                const orderIdElement = billModal.querySelector('.order-id');
+                const orderDateElement = billModal.querySelector('.order-date');
+                const paymentMethodElement = billModal.querySelector('.payment-method');
+                const billTableBody = billModal.querySelector('.bill-table tbody');
+                const billTotalElement = billModal.querySelector('.bill-total');
+
+                orderIdElement.textContent = currentOrder.id;
+                orderDateElement.textContent = currentOrder.date;
+                paymentMethodElement.textContent = currentOrder.paymentMethod;
+
+                billTableBody.innerHTML = '';
+                currentOrder.items.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>Rp ${item.price.toLocaleString('id-ID')}</td>
+                        <td>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td>
+                    `;
+                    billTableBody.appendChild(row);
+                });
+
+                billTotalElement.textContent = `Rp ${currentOrder.total.toLocaleString('id-ID')}`;
+            }
+
+            downloadBillBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const element = billModal.querySelector('.bill-content');
+                const opt = {
+                    margin: 1,
+                    filename: `Bill_Warung_Mamah_Abey_${currentOrder.id}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+
+                alert(`Pesanan berhasil! ID Pesanan: ${currentOrder.id}`);
+                cart = [];
+                updateCart();
+                billModal.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
